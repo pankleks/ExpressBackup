@@ -1,0 +1,28 @@
+﻿<Config>
+  <LogFile>Test.log</LogFile>
+  <ZipPassword>dc3dd9cca0bd4ffb9ac096633074a30e</ZipPassword>
+  <Tasks>
+    <BackupDirectoryTask ID="backup directory">
+      <LocalPath>c:\Temp</LocalPath>
+      <BackupPath>c:\Backup</BackupPath>
+      <BackupPrefix>test</BackupPrefix>
+      <Sftp>
+        <Host>94.23.3.170</Host>
+        <User>apriso</User>
+        <Password>CimPlus1</Password>
+        <Path>/c/Temp</Path>
+      </Sftp>
+    </BackupDirectoryTask> 
+    <BackupCleanupTask ID="Cleanup full">
+      <CleanupFilePrefix>test</CleanupFilePrefix>
+      <CleanupKeepDays>1</CleanupKeepDays>
+      <LocalPath>c:\Backup</LocalPath>
+      <Sftp>
+        <Host>94.23.3.170</Host>
+        <User>apriso</User>
+        <Password>CimPlus1</Password>
+        <Path>/c/Temp</Path>
+      </Sftp>
+    </BackupCleanupTask>
+  </Tasks>
+</Config>

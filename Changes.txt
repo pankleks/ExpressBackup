@@ -1,0 +1,60 @@
+﻿TODO:
+- shrink
+
+v0.4.8 (06/08/2015)
+- added try/catch blok around deleting file, to continue processing if can't delete particular file
+
+v0.4.7 (06/08/2015)
+- code refactoring for easy plugin of remote backup providers
+- added SFTP support (FTP over SSH)
+- added email test mode
+
+v0.4.6
+- added directory backup task
+- cleanup task: now user can setup different "keep days" for local and ftp
+- added config validation
+
+v0.4.5
+- ftp configuration changes
+- added task Disabled flag
+
+v0.4.4
+- fix: no file extention when zipping
+- fix: SampleConfig.xml true/false values
+- added upload progress for ftp upload (to console)
+- .net 4.0 > 3.5
+
+v0.4.3
+- fix: failure of mail send was crashing app
+- added parameters CleanupFileMatch (how file date is parsed from the name) and CleanupFileExtention (file extention)
+
+v0.4.2
+- LogLevel parameter added to control logged content
+
+v0.4.1
+- Views added into indexes task
+
+v0.4.0
+- IndexRebuildTask (reorganize or rebuild all indexes based on index fragmentation)
+- Statistics update task
+- Smtp notification for failed tasks
+- better ftp engine
+- fix: when FtpPath element was not present tool was crashing
+- fix: fragmentation enum failing was failing entire task
+
+v0.3.1
+- fix: backup date extract
+
+v0.3.0
+- if ZipPassword is not set then no encryption
+- BackupCleanupTask, added multiple prefixes
+- optimized file search
+- stop on error control flag
+- more precise log messages
+
+v0.2.0
+- splited tasks types Backup, BackupCleanup
+- Config file instead simple task list
+
+v0.1.0
+- base version

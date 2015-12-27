@@ -1,0 +1,78 @@
+<!--IMPORTANT! you have to install 7zip first, then copy 7z.exe, 7z.dll to tool directory or add PATH to 7z.exe -->
+<Config>
+  <LogFile>ExpressBackup.log</LogFile> <!-- name of the log file -->
+  <LogLevel>1</LogLevel> <!-- 0 - Debug+, 1 - Info+, 2 - Warning+, 3 - Error -->
+  <ZipPassword>password_for_zip_file</ZipPassword> <!-- if passed, this password will be used to encrypt zip file -->
+  <StopAtError>false</StopAtError> <!-- on error stop tasks processing or continue, use false,true -->
+  <Smtp>  <!-- Smtp server configuration, user to send notification mails -->
+    <Host>smtp.mailhost.org</Host>
+    <Port>25</Port>
+    <User>smtp_user</User>  <!-- User and Password elements are not required if Smtp server does not require auth. -->
+    <Password>smtp_password</Password>
+    <Mail>test@expressbackup.eu</Mail>  <!-- email address used as from -->
+  </Smtp>
+  <OnFailureMail>your@mail.com</OnFailureMail>  <!-- one or more emails to send notification (; separated) -->
+  <Tasks>
+    <!-- To create backup use BackupTask, you can have multiple backup tasks, just add another BackupTask element -->
+    <BackupTask ID="task name"> <!-- use ID for task description -->
+      <SqlServer>sql_server_name</SqlServer>
+      <SqlDatabase>sql_database_name</SqlDatabase>
+      <SqlUser>sql_user</SqlUser> <!-- if you wish to use MsSql integrated authentication leave this empty -->
+      <SqlPassword>sql_password</SqlPassword>
+      <SqlBackupType>Full</SqlBackupType> <!-- backup type Full, Differential, TransactionLog -->
+      <LocalPath>c:\temp</LocalPath> <!-- local path where backup will be stored -->
+      <!-- to use FTP use below Ftp element, remove Ftp element to skip ftp upload -->
+      <Ftp Disabled="true"> <!-- to disable use Disabled="true" -->
+        <Host>ftp://your.ftp.server</Host>
+        <User>ftp_user</User>
+        <Password>ftp_password</Password>
+        <Path>remote path for example /Backup</Path>
+      </Ftp>
+      <!-- to use SFTP use below Sftp element (you can't use both Ftp and Sftp) -->
+      <Sftp>
+        <Host>your ssh server address or ip</Host>
+        <User>ssh user</User>
+        <Password>ssh password</Password>
+        <Path>remote path - use ssh notation /c/temp/files/backup</Path>
+        <Port>optional port number, use if different than 22</Port>
+      </Sftp>      
+    </BackupTask>
+    <!-- To execute cleanup use BackupCleanupTask, you can have multiple cleanup tasks, just add another BackupCleanup -->
+    <BackupCleanupTask ID="cleaning old backups">
+      <CleanupFilePrefix>prefix1;prefix2</CleanupFilePrefix> <!-- one or more file name prefix (; separated). Used to match files to analyze -->
+      <CleanupKeepDays>10</CleanupKeepDays> <!-- after how many days delete files -->
+      <LocalPath>c:\temp</LocalPath> <!-- local path with backups -->
+      <Ftp> <!-- skip Ftp or Sftp if you don't need to clean remote -->
+        <Host>ftp://your.ftp.server</Host>
+        <User>ftp_user</User>
+        <Password>ftp_password</Password>
+        <Path>/Backup</Path>        
+      </Ftp>
+    </BackupCleanupTask>
+    <!-- note: if you don't wish to use ftp feature in any task just delete <Ftp*> elements -->
+    <IndexRebuildTask ID="indexes rebuild"> <!-- this task will reogranize or rebuild all indexes based on their fragmentation < 10% no action >10% reorganize >40% rebuild -->
+      <SqlServer>localhost</SqlServer>
+      <SqlDatabase>DB1</SqlDatabase>
+      <IndexTryOnline>false</IndexTryOnline> <!-- when true, tool will try to rebuild index online, if not possible tool will try offline. Use false when you know your SQL does not support online -->
+      <IndexAllowRebuild>true</IndexAllowRebuild> <!-- if false tool will only reorganize indexes only, even if rebuild would be better  -->
+    </IndexRebuildTask>
+    <UpdateStatsTask ID="statistics update" Disabled="true"> <!-- use Disabled attribute to disable task -->
+      <SqlServer>localhost</SqlServer>
+      <SqlDatabase>mydb</SqlDatabase>
+      <Percent>40</Percent> <!-- sampling percentage for update -->
+      <Recompute>true</Recompute> <!-- enables/disables statistics recomputing -->
+    </UpdateStatsTask>
+    <!-- to zip entire directory and copy it to ftp -->
+    <BackupDirectoryTask ID="backup directory">
+      <LocalPath>c:\Repositories</LocalPath> <!-- directory to backup -->
+      <BackupPath>c:\Backup</BackupPath>  <!-- local directory to store 7z file -->
+      <BackupPrefix>prefix1</BackupPrefix> <!-- file prefix -->
+      <Ftp>
+        <Host>ftp://your.ftp.server</Host>
+        <User>ftp_user</User>
+        <Password>ftp_password</Password>
+        <Path>/Backup</Path>
+      </Ftp>
+    </BackupDirectoryTask>
+  </Tasks>
+</Config>
